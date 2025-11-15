@@ -3,7 +3,7 @@ package cvbuilder;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class Mainn extends Application {
+public class Hello extends Application {
 
     public static void main(String[] args) {
         launch(args);
