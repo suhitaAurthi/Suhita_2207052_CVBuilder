@@ -1,4 +1,4 @@
-package cvbuilder;
+package main.java.cvbuilder;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
