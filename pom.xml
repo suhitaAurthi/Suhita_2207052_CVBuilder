@@ -133,7 +133,11 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
+<<<<<<< HEAD
                             <mainClass>com.example.demo1/com.example.demo1.Home</mainClass>
+=======
+                            <mainClass>com.example.demo1/com.example.demo1.Launcher</mainClass>
+>>>>>>> 2af6895 (finishing initial version)
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
