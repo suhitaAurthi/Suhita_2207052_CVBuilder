@@ -14,6 +14,7 @@ module com.example.demo1 {
 =======
 >>>>>>> 2af6895 (finishing initial version)
     requires java.desktop;
+    requires java.sql;
 
     opens com.example.demo1 to javafx.fxml;
     exports com.example.demo1;

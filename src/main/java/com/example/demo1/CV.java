@@ -27,6 +27,9 @@ public class CV {
         this.photoPath = photoPath;
     }
 
+    public CV(int id, String fullName, String email, String phone, String address, String education, String skills, String workExperience, String projects, String photoPath) {
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -97,5 +100,11 @@ public class CV {
 
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
+    }
+
+    public void setId(int anInt) {
+    }
+
+    public int getId() {
     }
 }
