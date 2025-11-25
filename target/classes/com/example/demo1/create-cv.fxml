@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.demo1.CreateCVController" style="-fx-background-color: #ecf0f1;">
+    
+    <HBox alignment="CENTER_LEFT" style="-fx-background-color: #3498db; -fx-padding: 20;">
+        <Label text="Create Your CV" textFill="white" style="-fx-font-size: 24px; -fx-font-weight: bold;">
+            <font>
+                <Font size="24.0" name="System Bold"/>
+            </font>
+        </Label>
+        <HBox HBox.hgrow="ALWAYS"/>
+        <Button text="Back" onAction="#handleBack" style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 5; -fx-padding: 8 20; -fx-cursor: hand;" textFill="white">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Button>
+    </HBox>
+    
+    <ScrollPane fitToWidth="true" style="-fx-background: #ecf0f1; -fx-background-color: #ecf0f1;" VBox.vgrow="ALWAYS">
+        <VBox spacing="20.0" style="-fx-padding: 30;">
+            
+            <VBox spacing="10.0" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 20;">
+                <Label text="Personal Information" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+                    <font>
+                        <Font size="18.0" name="System Bold"/>
+                    </font>
+                </Label>
+                
+                <HBox spacing="20.0" style="-fx-padding: 10 0 0 0;">
+                    <VBox spacing="12.0" HBox.hgrow="ALWAYS">
+                        <GridPane hgap="15.0" vgap="12.0">
+                            <Label text="Full Name *" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-size: 14px; -fx-text-fill: #2c3e50;">
+                                <font>
+                                    <Font size="14.0"/>
+                                </font>
+                            </Label>
+                            <TextField fx:id="fullNameField" promptText="Enter your full name" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 8; -fx-font-size: 14px;"/>
+                            
+                            <Label text="Email Address *" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-size: 14px; -fx-text-fill: #2c3e50;">
+                                <font>
+                                    <Font size="14.0"/>
+                                </font>
+                            </Label>
+                            <TextField fx:id="emailField" promptText="your.email@example.com" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 8; -fx-font-size: 14px;"/>
+                            
+                            <Label text="Phone Number *" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-size: 14px; -fx-text-fill: #2c3e50;">
+                                <font>
+                                    <Font size="14.0"/>
+                                </font>
+                            </Label>
+                            <TextField fx:id="phoneField" promptText="+1 (555) 123-4567" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 8; -fx-font-size: 14px;"/>
+                            
+                            <Label text="Address" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-font-size: 14px; -fx-text-fill: #2c3e50;">
+                                <font>
+                                    <Font size="14.0"/>
+                                </font>
+                            </Label>
+                            <TextField fx:id="addressField" promptText="City, State, Country" GridPane.columnIndex="1" GridPane.rowIndex="3" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 8; -fx-font-size: 14px;"/>
+                        </GridPane>
+                    </VBox>
+                    
+                    <VBox spacing="8.0" alignment="TOP_CENTER" style="-fx-padding: 0;">
+                        <VBox style="-fx-border-color: #bdc3c7; -fx-border-width: 2; -fx-background-color: #f9f9f9;" prefWidth="150" prefHeight="150" alignment="CENTER">
+                            <ImageView fx:id="photoImageView" fitWidth="146" fitHeight="146" preserveRatio="true"/>
+                        </VBox>
+                        <Button text="Upload Photo" onAction="#handleUploadPhoto" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 5 15; -fx-cursor: hand;" textFill="white">
+                            <font>
+                                <Font size="12.0"/>
+                            </font>
+                        </Button>
+                    </VBox>
+                </HBox>
+            </VBox>
+            
+            <VBox spacing="10.0" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 20;">
+                <Label text="Educational Qualifications" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+                    <font>
+                        <Font size="16.0" name="System Bold"/>
+                    </font>
+                </Label>
+                <TextArea fx:id="educationArea" promptText="e.g., Bachelor of Science in Computer Science&#10;University Name, 2020-2024&#10;GPA: 3.8/4.0" prefRowCount="4" wrapText="true" style="-fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 8; -fx-font-size: 14px;"/>
+            </VBox>
+            
+            <VBox spacing="10.0" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 20;">
+                <Label text="Skills" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+                    <font>
+                        <Font size="16.0" name="System Bold"/>
+                    </font>
+                </Label>
+                <TextArea fx:id="skillsArea" promptText="e.g., Java, Python, JavaScript, React, Node.js&#10;Problem Solving, Team Collaboration, Communication" prefRowCount="3" wrapText="true" style="-fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 8; -fx-font-size: 14px;"/>
+            </VBox>
+            
+            <VBox spacing="10.0" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 20;">
+                <Label text="Work Experience" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+                    <font>
+                        <Font size="16.0" name="System Bold"/>
+                    </font>
+                </Label>
+                <TextArea fx:id="workExperienceArea" promptText="e.g., Software Developer Intern&#10;Company Name, June 2023 - August 2023&#10;• Developed web applications using React and Node.js&#10;• Collaborated with team of 5 developers" prefRowCount="5" wrapText="true" style="-fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 8; -fx-font-size: 14px;"/>
+            </VBox>
+            
+            <VBox spacing="10.0" style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 20;">
+                <Label text="Projects" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+                    <font>
+                        <Font size="16.0" name="System Bold"/>
+                    </font>
+                </Label>
+                <TextArea fx:id="projectsArea" promptText="e.g., E-commerce Website&#10;Built a full-stack e-commerce platform&#10;Technologies: React, Node.js, MongoDB" prefRowCount="4" wrapText="true" style="-fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-padding: 8; -fx-font-size: 14px;"/>
+            </VBox>
+            
+            <HBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20 0 10 0;">
+                <Button text="Generate CV" onAction="#handleGenerateCV" prefWidth="180.0" prefHeight="40.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-cursor: hand;" textFill="white">
+                    <font>
+                        <Font size="16.0" name="System Bold"/>
+                    </font>
+                </Button>
+            </HBox>
+            
+        </VBox>
+    </ScrollPane>
+    
+</VBox>
