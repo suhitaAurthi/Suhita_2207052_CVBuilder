@@ -8,4 +8,9 @@ public class HomeController {
     private void handleCreateNewCV() {
         CVBuilderApp.showCreateCVScreen();
     }
+
+    @FXML
+    private void handleViewAll() {
+        CVBuilderApp.showListScreen();
+    }
 }

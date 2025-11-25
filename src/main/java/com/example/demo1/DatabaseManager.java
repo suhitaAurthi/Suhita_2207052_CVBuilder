@@ -7,87 +7,74 @@ import java.util.List;
 public class DatabaseManager {
 
     private static final String DB_URL = "jdbc:sqlite:cvbuilder.db";
-    private static Connection connection;
 
-    // SQL commands
-    private static final String CREATE_TABLE_SQL =
-            "CREATE TABLE IF NOT EXISTS cvs (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "fullName TEXT NOT NULL," +
-                    "email TEXT," +
-                    "phone TEXT," +
-                    "address TEXT," +
-                    "education TEXT," +
-                    "skills TEXT," +
-                    "workExperience TEXT," +
-                    "projects TEXT," +
-                    "photoPath TEXT" +
-                    ");";
+    static {
+        createTableIfNotExists();
+    }
 
-    private static final String INSERT_SQL =
-            "INSERT INTO cvs (fullName, email, phone, address, education, skills, workExperience, projects, photoPath) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static Connection connect() throws SQLException {
+        return DriverManager.getConnection(DB_URL);
+    }
 
-    private static final String SELECT_ALL_SQL =
-            "SELECT * FROM cvs ORDER BY id ASC";
+    private static void createTableIfNotExists() {
+        String sql = "CREATE TABLE IF NOT EXISTS cv ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "fullName TEXT,"
+                + "email TEXT,"
+                + "phone TEXT,"
+                + "address TEXT,"
+                + "education TEXT,"
+                + "skills TEXT,"
+                + "workExperience TEXT,"
+                + "projects TEXT,"
+                + "photoPath TEXT"
+                + ")";
 
-    private static final String UPDATE_SQL =
-            "UPDATE cvs SET fullName=?, email=?, phone=?, address=?, education=?, skills=?, workExperience=?, projects=?, photoPath=? WHERE id=?;";
-
-    private static final String DELETE_SQL =
-            "DELETE FROM cvs WHERE id=?;";
-
-    // Initialize database connection
-    public static void initializeDatabase() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(DB_URL);
-                createTable();
-                System.out.println("Database created successfully.");
-            }
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error initializing database.");
         }
     }
 
-    // Create table
-    private static void createTable() throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(CREATE_TABLE_SQL)) {
-            statement.executeUpdate();
-        }
-    }
+    // Insert and return generated id
+    public static int insertCV(CV cv) {
+        String sql = "INSERT INTO cv (fullName, email, phone, address, education, skills, workExperience, projects, photoPath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-    // Insert CV
-    public static CV insertCV(CV cv) {
-        try (PreparedStatement ps = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, cv.getFullName());
-            ps.setString(2, cv.getEmail());
-            ps.setString(3, cv.getPhone());
-            ps.setString(4, cv.getAddress());
-            ps.setString(5, cv.getEducation());
-            ps.setString(6, cv.getSkills());
-            ps.setString(7, cv.getWorkExperience());
-            ps.setString(8, cv.getProjects());
-            ps.setString(9, cv.getPhotoPath());
-            ps.executeUpdate();
+            pstmt.setString(1, cv.getFullName());
+            pstmt.setString(2, cv.getEmail());
+            pstmt.setString(3, cv.getPhone());
+            pstmt.setString(4, cv.getAddress());
+            pstmt.setString(5, cv.getEducation());
+            pstmt.setString(6, cv.getSkills());
+            pstmt.setString(7, cv.getWorkExperience());
+            pstmt.setString(8, cv.getProjects());
+            pstmt.setString(9, cv.getPhotoPath());
 
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) {
-                    cv.setId(keys.getInt(1));
+            int affected = pstmt.executeUpdate();
+            if (affected == 0) return -1;
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return cv;
+        return -1;
     }
 
-    // Get all CVs
-    public static List<CV> getAllCVs() {
-        List<CV> cvs = new ArrayList<>();
-        try (PreparedStatement ps = connection.prepareStatement(SELECT_ALL_SQL);
-             ResultSet rs = ps.executeQuery()) {
+    public static List<CV> getAllCV() {
+        List<CV> list = new ArrayList<>();
+        String sql = "SELECT * FROM cv ORDER BY id DESC";
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 CV cv = new CV(
                         rs.getInt("id"),
@@ -101,52 +88,77 @@ public class DatabaseManager {
                         rs.getString("projects"),
                         rs.getString("photoPath")
                 );
-                cvs.add(cv);
+                list.add(cv);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return cvs;
+        return list;
     }
 
-    // Update CV
-    public static void updateCV(CV cv) {
-        try (PreparedStatement ps = connection.prepareStatement(UPDATE_SQL)) {
-            ps.setString(1, cv.getFullName());
-            ps.setString(2, cv.getEmail());
-            ps.setString(3, cv.getPhone());
-            ps.setString(4, cv.getAddress());
-            ps.setString(5, cv.getEducation());
-            ps.setString(6, cv.getSkills());
-            ps.setString(7, cv.getWorkExperience());
-            ps.setString(8, cv.getProjects());
-            ps.setString(9, cv.getPhotoPath());
-            ps.setInt(10, cv.getId());
-            ps.executeUpdate();
+    public static boolean updateCV(CV cv) {
+        String sql = "UPDATE cv SET fullName=?, email=?, phone=?, address=?, education=?, skills=?, workExperience=?, projects=?, photoPath=? WHERE id=?";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, cv.getFullName());
+            pstmt.setString(2, cv.getEmail());
+            pstmt.setString(3, cv.getPhone());
+            pstmt.setString(4, cv.getAddress());
+            pstmt.setString(5, cv.getEducation());
+            pstmt.setString(6, cv.getSkills());
+            pstmt.setString(7, cv.getWorkExperience());
+            pstmt.setString(8, cv.getProjects());
+            pstmt.setString(9, cv.getPhotoPath());
+            pstmt.setInt(10, cv.getId());
+
+            int affected = pstmt.executeUpdate();
+            return affected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    // Delete CV
-    public static void deleteCV(int id) {
-        try (PreparedStatement ps = connection.prepareStatement(DELETE_SQL)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
+    public static boolean deleteCV(int id) {
+        String sql = "DELETE FROM cv WHERE id=?";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            int affected = pstmt.executeUpdate();
+            return affected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    // Close connection
-    public static void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Database connection closed.");
+    // Utility: load single CV by id
+    public static CV getCVById(int id) {
+        String sql = "SELECT * FROM cv WHERE id=?";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new CV(
+                            rs.getInt("id"),
+                            rs.getString("fullName"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("education"),
+                            rs.getString("skills"),
+                            rs.getString("workExperience"),
+                            rs.getString("projects"),
+                            rs.getString("photoPath")
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
