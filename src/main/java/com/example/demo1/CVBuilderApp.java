@@ -14,7 +14,7 @@ public class CVBuilderApp extends Application {
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
         showHomeScreen();
-        stage.setTitle("CV Builder");
+        stage.setTitle("CV Builder (2207052)");
         stage.show();
     }
 
